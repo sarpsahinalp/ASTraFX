@@ -60,7 +60,16 @@ public class DBCSDisplayTest {
         compilationUnit.accept(buttonChecker, null);
         assertTrue(buttonChecker.isInitializedCorrectly(), "Button is not initialized correctly.");
 
-        // Additional checks can be added similarly
+        GeneralInitializationChecker textAreaChecker = new GeneralInitializationChecker(
+                "start",
+                "DBCSDisplay",
+                "TextArea",
+                Collections.singletonList(
+                        arg -> arg.isNameExpr() && arg.asNameExpr().getNameAsString().equals("RECORD_TEXT")
+                )
+        );
+        compilationUnit.accept(textAreaChecker, null);
+        assertTrue(textAreaChecker.isInitializedCorrectly(), "TextArea is not initialized correctly.");
     }
 
     @Test

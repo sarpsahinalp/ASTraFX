@@ -4,7 +4,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.List;
@@ -28,24 +27,21 @@ public class GeneralInitializationChecker extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(MethodDeclaration method, Void arg) {
         if (method.getNameAsString().equals(methodName)) {
-            BlockStmt body = method.getBody().orElse(null);
-            if (body != null) {
-                body.accept(new VoidVisitorAdapter<Void>() {
-                    @Override
-                    public void visit(VariableDeclarator variable, Void arg) {
-                        if (variable.getType().asString().equals(variableType) &&
-                                variable.getInitializer().isPresent()) {
-                            Expression initializer = variable.getInitializer().get();
-                            if (initializer instanceof ObjectCreationExpr objectCreationExpr) {
-                                if (objectCreationExpr.getType().asString().equals(variableType)) {
-                                    isInitializedCorrectly = checkArguments(objectCreationExpr.getArguments());
-                                }
+            method.getBody().ifPresent(body -> body.accept(new VoidVisitorAdapter<Void>() {
+                @Override
+                public void visit(VariableDeclarator variable, Void arg) {
+                    if (variable.getType().asString().equals(variableType) &&
+                            variable.getInitializer().isPresent()) {
+                        Expression initializer = variable.getInitializer().get();
+                        if (initializer instanceof ObjectCreationExpr objectCreationExpr) {
+                            if (objectCreationExpr.getType().asString().equals(variableType)) {
+                                isInitializedCorrectly = checkArguments(objectCreationExpr.getArguments());
                             }
                         }
-                        super.visit(variable, arg);
                     }
-                }, null);
-            }
+                    super.visit(variable, arg);
+                }
+            }, null));
         }
         super.visit(method, arg);
     }
