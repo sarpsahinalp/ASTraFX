@@ -62,5 +62,3 @@ public void testButtonFunctionality() {
 ```
 
 In this example, the test checks if the warningProceed button has its setOnAction method set with the correct lambda expression in the start method.
-
-asd
