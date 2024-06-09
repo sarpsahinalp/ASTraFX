@@ -34,7 +34,6 @@ public void testCheckBoxInitialization() {
 ```
 In this example, the test checks if a CheckBox is initialized with the argument INDICATOR_TITLE in the start method.
 
-
 ## ButtonFunctionalityChecker
 ### Purpose
 The ButtonFunctionalityChecker is used to verify that a button's functionality is set correctly, specifically checking if the setOnAction method is called with the correct lambda expression.
